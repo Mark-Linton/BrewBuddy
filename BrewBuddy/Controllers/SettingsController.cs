@@ -1,4 +1,4 @@
-﻿// <copyright file="ProfilesController.cs" company="Mark Linton">
+﻿// <copyright file="SettingsController.cs" company="Mark Linton">
 // Copyright (c) Mark Linton. All rights reserved.
 // Licensed under the GNU GENERAL PUBLIC LICENSE Version 3 license.
 // See LICENSE file in the solution root for full license information.
@@ -13,9 +13,12 @@ namespace BrewBuddy.Controllers
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
+    /// <summary>
+    /// Contains the endpoints related to application settings.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class ProfilesController : ControllerBase
+    public class SettingsController : ControllerBase
     {
     }
 }

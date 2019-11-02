@@ -6,6 +6,8 @@
 
 namespace BrewBuddy
 {
+    using BrewBuddy.Data.Persistence;
+    using BrewBuddy.Data.Recipes;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,18 +16,34 @@ namespace BrewBuddy
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
+    /// <summary>
+    /// Created when the application is instantiated.
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup"/> class.
+        /// </summary>
+        /// <param name="configuration">Provides access to configuration.</param>
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
+        /// <summary>
+        /// Gets the application configuration.
+        /// </summary>
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services">Allows populating the IoC container.</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IRepository, SQLiteRepository>();
+
+            services.AddTransient<IRecipesService, RecipesService>();
 
             services.AddControllersWithViews();
 
@@ -36,7 +54,11 @@ namespace BrewBuddy
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app">Provides access to the IApplicationBuilder.</param>
+        /// <param name="env">Provides access to the IWebHostEnvironment.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -46,6 +68,7 @@ namespace BrewBuddy
             else
             {
                 app.UseExceptionHandler("/Error");
+
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
