@@ -6,7 +6,13 @@
 
 namespace BrewBuddy
 {
+    using BrewBuddy.Data.Batches;
+    using BrewBuddy.Data.Ingredients;
+    using BrewBuddy.Data.Inventory;
     using BrewBuddy.Data.Persistence;
+    using BrewBuddy.Data.Profiles.Equipment;
+    using BrewBuddy.Data.Profiles.Fermentation;
+    using BrewBuddy.Data.Profiles.Water;
     using BrewBuddy.Data.Recipes;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -21,6 +27,8 @@ namespace BrewBuddy
     /// </summary>
     public class Startup
     {
+        private SQLiteRepository repository;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
@@ -28,6 +36,7 @@ namespace BrewBuddy
         public Startup(IConfiguration configuration)
         {
             this.Configuration = configuration;
+            this.repository = new SQLiteRepository();
         }
 
         /// <summary>
@@ -41,9 +50,21 @@ namespace BrewBuddy
         /// <param name="services">Allows populating the IoC container.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IRepository, SQLiteRepository>();
+            services
+                .AddSingleton<IBatchesRepository>(this.repository)
+                .AddSingleton<IIngredientsRepository>(this.repository)
+                .AddSingleton<IInventoryRepository>(this.repository)
+                .AddSingleton<IProfilesRepository>(this.repository)
+                .AddSingleton<IRecipeRepository>(this.repository);
 
-            services.AddTransient<IRecipesService, RecipesService>();
+            services
+                .AddTransient<IBatchService, BatchService>()
+                .AddTransient<IEquipmentProfilesService, EquipmentProfilesService>()
+                .AddTransient<IFermentationProfilesService, FermentationProfilesService>()
+                .AddTransient<IIngredientService, IngredientService>()
+                .AddTransient<IInventoryService, InventoryService>()
+                .AddTransient<IRecipesService, RecipesService>()
+                .AddTransient<IWaterProfilesService, WaterProfilesService>();
 
             services.AddControllersWithViews();
 

@@ -8,7 +8,6 @@ namespace BrewBuddy.Data.Recipes
 {
     using System;
     using System.Collections.Generic;
-    using System.Text;
     using BrewBuddy.Data.Persistence;
 
     /// <summary>
@@ -16,33 +15,33 @@ namespace BrewBuddy.Data.Recipes
     /// </summary>
     public class RecipesService : IRecipesService
     {
-        private readonly IRepository repository;
+        private readonly IRecipeRepository repository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RecipesService"/> class.
         /// </summary>
         /// <param name="repository">Provides data persistence.</param>
-        public RecipesService(IRepository repository)
+        public RecipesService(IRecipeRepository repository)
         {
             this.repository = repository;
         }
 
         /// <inheritdoc/>
-        public void Delete(int id)
+        public void DeleteRecipe(Guid id)
         {
-            throw new NotImplementedException();
+            this.repository.DeleteRecipe(id);
         }
 
         /// <inheritdoc/>
-        public IEnumerable<Recipe> Get()
+        public IEnumerable<Recipe> GetRecipes()
         {
-            throw new NotImplementedException();
+            return this.repository.GetRecipes();
         }
 
         /// <inheritdoc/>
-        public Recipe Get(int id)
+        public Recipe GetRecipe(Guid id)
         {
-            throw new NotImplementedException();
+            return this.repository.GetRecipe(id);
         }
     }
 }

@@ -6,11 +6,9 @@
 
 namespace BrewBuddy.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Http;
+    using BrewBuddy.Data.Profiles.Equipment;
+    using BrewBuddy.Data.Profiles.Fermentation;
+    using BrewBuddy.Data.Profiles.Water;
     using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
@@ -20,5 +18,24 @@ namespace BrewBuddy.Controllers
     [ApiController]
     public class ProfilesController : ControllerBase
     {
+        private readonly IEquipmentProfilesService equipmentProfilesService;
+        private readonly IFermentationProfilesService fermentationProfilesService;
+        private readonly IWaterProfilesService waterProfilesService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProfilesController"/> class.
+        /// </summary>
+        /// <param name="equipmentProfilesService">Provides access to equipment profiles persistence.</param>
+        /// <param name="fermentationProfilesService">Provides access to fermentation profiles persistence.</param>
+        /// <param name="waterProfilesService">Provides access to water profiles persistence.</param>
+        public ProfilesController(
+            IEquipmentProfilesService equipmentProfilesService,
+            IFermentationProfilesService fermentationProfilesService,
+            IWaterProfilesService waterProfilesService)
+        {
+            this.equipmentProfilesService = equipmentProfilesService;
+            this.fermentationProfilesService = fermentationProfilesService;
+            this.waterProfilesService = waterProfilesService;
+        }
     }
 }

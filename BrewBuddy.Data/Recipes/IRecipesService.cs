@@ -8,7 +8,6 @@ namespace BrewBuddy.Data.Recipes
 {
     using System;
     using System.Collections.Generic;
-    using System.Text;
 
     /// <summary>
     /// Service used to persist brew recipe data.
@@ -19,19 +18,19 @@ namespace BrewBuddy.Data.Recipes
         /// Gets all recipes.
         /// </summary>
         /// <returns>A collection of Recipe objects.</returns>
-        IEnumerable<Recipe> Get();
+        IEnumerable<Recipe> GetRecipes();
 
         /// <summary>
         /// Gets a recipe.
         /// </summary>
         /// <param name="id">The id of the recipe to fetch.</param>
         /// <returns>A Recipe if found, null otherwise.</returns>
-        Recipe Get(int id);
+        Recipe GetRecipe(Guid id);
 
         /// <summary>
         /// Deletes a recipe from persistent storage.
         /// </summary>
         /// <param name="id">The id of the recipe to delete.</param>
-        void Delete(int id);
+        void DeleteRecipe(Guid id);
     }
 }

@@ -12,7 +12,7 @@ namespace BrewBuddy.Controllers
     using System.Threading.Tasks;
     using BrewBuddy.Data.Recipes;
     using BrewBuddy.Helpers;
-    using BrewBuddy.Models;
+    using BrewBuddy.ResponseDTOs;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
@@ -41,7 +41,7 @@ namespace BrewBuddy.Controllers
         [HttpGet]
         public IEnumerable<RecipeResponseDTO> Get()
         {
-            var recipes = this.recipesService.Get();
+            var recipes = this.recipesService.GetRecipes();
 
             var recipeDTOs = new List<RecipeResponseDTO>();
             foreach (var recipe in recipes)
@@ -58,12 +58,18 @@ namespace BrewBuddy.Controllers
         /// <param name="id">The id of the recipe to get.</param>
         /// <returns>The recipe if found, "NotFound" otherwise.</returns>
         [HttpGet("{id}", Name = "Get")]
-        public RecipeResponseDTO Get(int id)
+        public ActionResult<RecipeResponseDTO> Get(string id)
         {
-            var recipe = this.recipesService.Get(id);
-            var dto = recipe.ToDTO();
+            Guid recipeId;
+            if (Guid.TryParse(id, out recipeId))
+            {
+                var recipe = this.recipesService.GetRecipe(recipeId);
+                var dto = recipe.ToDTO();
 
-            return dto;
+                return dto;
+            }
+
+            return this.NotFound();
         }
 
         /// <summary>
@@ -71,9 +77,13 @@ namespace BrewBuddy.Controllers
         /// </summary>
         /// <param name="id">The id of the recipe to delete.</param>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(string id)
         {
-            this.recipesService.Delete(id);
+            Guid recipeId;
+            if (Guid.TryParse(id, out recipeId))
+            {
+                this.recipesService.DeleteRecipe(recipeId);
+            }
         }
     }
 }

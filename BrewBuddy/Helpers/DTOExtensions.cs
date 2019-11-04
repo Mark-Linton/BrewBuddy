@@ -11,7 +11,8 @@ namespace BrewBuddy.Helpers
     using System.Linq;
     using System.Threading.Tasks;
     using BrewBuddy.Data.Recipes;
-    using BrewBuddy.Models;
+    using BrewBuddy.ResponseDTOs;
+    using BrewBuddy.ResponseDTOs.Models;
 
     /// <summary>
     /// A collection of extension methods used to convert internal data structures to the appropriate response DTO objects.
@@ -25,7 +26,73 @@ namespace BrewBuddy.Helpers
         /// <returns>A RecipeResponseDTO.</returns>
         public static RecipeResponseDTO ToDTO(this Recipe recipe)
         {
-            return new RecipeResponseDTO();
+            if (recipe == null)
+            {
+                throw new ArgumentNullException(nameof(recipe));
+            }
+
+            return new RecipeResponseDTO
+            {
+                Id = recipe.Id.ToString("N"),
+                Name = recipe.Name,
+                Fermentables = recipe.Fermentables.ToDTOs(),
+                HopAdditions = recipe.Hops.ToDTOs(),
+                MiscAdditions = recipe.Misc.ToDTOs(),
+            };
+        }
+
+        private static IEnumerable<FermentableAdditionDTO> ToDTOs(this IEnumerable<FermentableAddition> fermentables)
+        {
+            var dtoList = new List<FermentableAdditionDTO>();
+
+            if (fermentables != null && fermentables.Any())
+            {
+                foreach (var fermentable in fermentables)
+                {
+                    dtoList.Add(new FermentableAdditionDTO
+                    {
+
+                    });
+                }
+            }
+
+            return dtoList;
+        }
+
+        private static IEnumerable<HopAdditionDTO> ToDTOs(this IEnumerable<HopAddition> hops)
+        {
+            var dtoList = new List<HopAdditionDTO>();
+
+            if (hops != null && hops.Any())
+            {
+                foreach (var hop in hops)
+                {
+                    dtoList.Add(new HopAdditionDTO
+                    {
+
+                    });
+                }
+            }
+
+            return dtoList;
+        }
+
+        private static IEnumerable<MiscAdditionDTO> ToDTOs(this IEnumerable<MiscAddition> miscellaneous)
+        {
+            var dtoList = new List<MiscAdditionDTO>();
+
+            if (miscellaneous != null && miscellaneous.Any())
+            {
+                foreach (var misc in miscellaneous)
+                {
+                    dtoList.Add(new MiscAdditionDTO
+                    {
+
+                    });
+                }
+            }
+
+            return dtoList;
         }
     }
 }

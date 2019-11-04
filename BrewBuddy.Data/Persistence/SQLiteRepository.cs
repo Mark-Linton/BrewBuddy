@@ -1,12 +1,23 @@
-﻿namespace BrewBuddy.Data.Persistence
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
+﻿// <copyright file="SQLiteRepository.cs" company="Mark Linton">
+// Copyright (c) Mark Linton. All rights reserved.
+// Licensed under the GNU GENERAL PUBLIC LICENSE Version 3 license.
+// See LICENSE file in the solution root for full license information.
+// </copyright>
 
-    public class SQLiteRepository : IRepository
+namespace BrewBuddy.Data.Persistence
+{
+    using System.Data;
+    using System.Data.SQLite;
+    using System.IO;
+
+    /// <summary>
+    /// Provides data persistence using SQLite.
+    /// </summary>
+    public partial class SQLiteRepository
+        : IRecipeRepository, IBatchesRepository, IIngredientsRepository, IInventoryRepository, IProfilesRepository
     {
-        private const string RecipeTable = "Recipe";
+        private const string DbName = "data.db3";
+        private const string RecipesTable = "Recipe";
         private const string RecipeIngredientsTable = "Recipe_Ingredients";
         private const string IngredientsTable = "Ingredients";
         private const string InventoryTable = "Inventory";
@@ -18,7 +29,7 @@
             {
                 "PRAGMA locking_mode=EXCLUSIVE",
 
-                @$"CREATE TABLE IF NOT EXISTS {RecipeTable} (
+                @$"CREATE TABLE IF NOT EXISTS {RecipesTable} (
                     id              GUID    NOT NULL,
                     name            TEXT,
                     brewer          TEXT,
@@ -66,12 +77,37 @@
                 )",
             };
 
+        private readonly string connectionString;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SQLiteRepository"/> class.
         /// </summary>
         public SQLiteRepository()
         {
+            this.connectionString = $"Data Source={DbName};Version=3;";
+            this.CreateDB();
+        }
 
+        private void CreateDB()
+        {
+            if (!File.Exists(DbName))
+            {
+                SQLiteConnection.CreateFile(DbName);
+            }
+
+            using (var connection = new SQLiteConnection(this.connectionString))
+            using (var command = new SQLiteCommand())
+            {
+                connection.Open();
+                command.CommandType = CommandType.Text;
+                command.Connection = connection;
+
+                foreach (var cmdString in this.createTableCommands)
+                {
+                    command.CommandText = cmdString;
+                    command.ExecuteNonQuery();
+                }
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 # BrewBuddy Entity Naming Conventions
 
-All entities must conform to the following naming conventions.
+All entities try to conform to the following naming conventions.
 
 No _Controller_ may pass a _RequestDTO_ to a _Service_. The data must be transformed by the _Controller_.
 
