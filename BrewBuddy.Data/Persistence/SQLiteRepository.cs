@@ -65,15 +65,15 @@ namespace BrewBuddy.Data.Persistence
                 )",
 
                 $@"CREATE TABLE IF NOT EXISTS {ProfilesWater} (
-                    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+                    id              INTEGER PRIMARY KEY AUTOINCREMENT
                 )",
 
                 $@"CREATE TABLE IF NOT EXISTS {ProfilesEquipment} (
-                    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+                    id              INTEGER PRIMARY KEY AUTOINCREMENT
                 )",
 
                 $@"CREATE TABLE IF NOT EXISTS {ProfilesFermentation} (
-                    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+                    id              INTEGER PRIMARY KEY AUTOINCREMENT
                 )",
             };
 
